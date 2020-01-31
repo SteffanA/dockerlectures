@@ -1,0 +1,26 @@
+version: '3'
+services:
+  web:
+    build:
+      context: . # Where to see files/folders pulled for container build
+      dockerfile: Dockerfile.dev # location of dockerfile for image
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules # Do not try to map anything against node_modules inside the container
+      - .:/app # map outside the container into the app folder in the container
+  tests: # Second service for running tests
+    restart: always
+    build:
+      context: . # Where to see files/folders pulled for container build
+      dockerfile: Dockerfile.dev # location of dockerfile for image
+    # No ports required for testing
+    volumes:
+      - /app/node_modules # Do not try to map anything against node_modules inside the container
+      - .:/app
+    # Allow us to send signals, ctrl+c etc.
+    stdin_open: true
+    tty: true
+    # Attatch in another terminal and we should be able to interact w/ cmd options
+    #Override the command
+    command: ["npm", "run", "test"]

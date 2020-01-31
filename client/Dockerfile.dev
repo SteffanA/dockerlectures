@@ -1,0 +1,11 @@
+FROM node:alpine
+
+WORKDIR '/app/'
+
+COPY package.json .
+RUN npm install
+
+# no longer needed because of volume mounting; but good to have in case mounting changes
+COPY . . 
+
+CMD ["npm", "run", "start"]

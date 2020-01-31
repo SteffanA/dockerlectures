@@ -1,0 +1,17 @@
+# Version of docker compose
+version: '3'
+# All services by default are using the same network
+# define our services
+services:
+  # Build this first
+  redis-server:
+    # image is standard docker hub
+    image: 'redis'
+  node-app:
+    # define the policy if this should restart on death
+    restart: on-failure #unless-stopped, always, "no", on-failure
+    # image is gained by building in this dir
+    build: '.'
+    #local:container
+    ports:
+      - "4001:8081"

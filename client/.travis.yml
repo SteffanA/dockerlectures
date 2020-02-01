@@ -1,0 +1,31 @@
+sudo: required
+language: generic
+services:
+  - docker
+
+# Setup steps
+before_install:
+  - docker build -t spa/docker-react -f Dockerfile.dev .
+
+# Commands to be executed
+script:
+  # CI flag allows it to exit when test finishes. used to be -- --coverage
+  - docker run -e CI=true spa/docker-react npm run test
+
+# Config for how to deploy to AWS
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: "ap-south-1"
+  app: "docker-react"
+  env: "DockerReact-env"
+  # S3 bucket - location to place all our files into
+  bucket_name: "elasticbeanstalk-ap-south-1-256406234615"
+  # Folder to place files into
+  bucket_path: "docker-react"
+  # Deploy only from master branch; watch for changes
+  on:
+    branch: master
+    # Keys are setup in TravisCI as env variables
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY

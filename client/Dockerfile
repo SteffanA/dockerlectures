@@ -12,6 +12,8 @@ RUN npm run build
 
 # Run phase
 FROM nginx
+# Needs port map to port 80. AWS reads this and exposes. Local dev does nothing, just a note
+EXPOSE 80
 # Copy over something from the builder phase (from-> to)
 # The nginx image suggests where to place. It also will auto-start
 COPY --from=builder /app/build /usr/share/nginx/html
